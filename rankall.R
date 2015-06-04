@@ -16,6 +16,7 @@ rankall <- function(outcome, num = "best") {
   
   ## For each state, find the hospital of the given rank
   for(i in 1:length(unique(data$State))) {
+    localnum <- num
     state <- unique(data$State)[i]
     datastate <- data[data[,"State"]==state,] #Select only data in the right state
     
@@ -30,11 +31,11 @@ rankall <- function(outcome, num = "best") {
     sorteddata <- datastate[order(datastate$Score,datastate$Hospital.Name,na.last=NA,decreasing=FALSE),]
     
     ## adapt for "best" and "worst
-    if (num=="best") num <- 1
-    if (num=="worst") num <- length(sorteddata[,3])
+    if (localnum=="best") localnum <- 1
+    if (localnum=="worst") localnum <- length(sorteddata[,3])
     
     ## Return
-    results[nrow(results)+1,] <- c(sorteddata[num,1],state)
+    results[nrow(results)+1,] <- c(sorteddata[localnum,1],state)
   }
   ## Return a data frame with the hospital names and the
   ## (abbreviated) state name
