@@ -18,17 +18,17 @@ rankhospital <- function(state, outcome,num="best") {
                           "heart failure" = "Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure",
                           "pneumonia" = "Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia"
   )
-  data <- data[,c("Hospital.Name",outcomecolumn)]
-  names(data)[2]<-"Score"
-  data[,2] <- suppressWarnings(as.numeric(data[,2]))
+  data <- data[,c("Hospital.Name","State",outcomecolumn)]
+  names(data)[3]<-"Score"
+  data[,3] <- suppressWarnings(as.numeric(data[,3]))
   
   ## Rank
-  sorteddata <- data[order(data$Score,na.last=NA,decreasing=TRUE),]
+  sorteddata <- data[order(data$Score,data$Hospital.Name,na.last=NA,decreasing=FALSE),]
   print(head(sorteddata))
   
   ## adapt for "best" and "worst
   if (num=="best") num <- 1
-  if (num=="worst") num <- length(sorteddata[,2])
+  if (num=="worst") num <- length(sorteddata[,3])
   
   ## Return
   sorteddata[num,]$Hospital.Name
